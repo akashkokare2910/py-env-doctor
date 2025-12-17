@@ -41,9 +41,20 @@ jobs:
           data = tomllib.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
           ver = data['project']['version']
           tag = sys.argv[1]
-          if ver != tag:
-              raise SystemExit(f"Version mismatch: pyproject.toml has {ver}, tag has {tag}")
-          print(f"OK: version {ver} matches tag")
+
+          # Allow release-candidate tags like: 0.1.0-rc.1
+          # In that case validate only the base version (0.1.0) against pyproject.
+          if "-rc." in tag:
+              base = tag.split("-rc.", 1)[0]
+              if ver != base:
+                  raise SystemExit(
+                      f"Version mismatch: pyproject.toml has {ver}, rc tag base has {base} (tag {tag})"
+                  )
+              print(f"OK: version {ver} matches rc tag base {base}")
+          else:
+              if ver != tag:
+                  raise SystemExit(f"Version mismatch: pyproject.toml has {ver}, tag has {tag}")
+              print(f"OK: version {ver} matches tag")
           PY
           "$VER_FROM_TAG"
 
