@@ -68,7 +68,11 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
         run: |
-          python -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*
+          if [ -z "${TWINE_PASSWORD}" ]; then
+            echo "Missing GitHub secret: TEST_PYPI_API_TOKEN"
+            exit 1
+          fi
+          python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*
 
       - name: Publish to PyPI (stable tags)
         if: ${{ !contains(github.ref_name, '-rc.') }}
@@ -76,4 +80,8 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python -m twine upload dist/*
+          if [ -z "${TWINE_PASSWORD}" ]; then
+            echo "Missing GitHub secret: PYPI_API_TOKEN"
+            exit 1
+          fi
+          python -m twine upload --verbose dist/*
