@@ -30,7 +30,7 @@ jobs:
         run: |
           TAG="${GITHUB_REF_NAME}"
           VER_FROM_TAG="${TAG#v}"
-          python - <<'PY'
+          python - "$VER_FROM_TAG" <<'PY'
           import sys
           try:
               import tomllib
@@ -56,7 +56,6 @@ jobs:
                   raise SystemExit(f"Version mismatch: pyproject.toml has {ver}, tag has {tag}")
               print(f"OK: version {ver} matches tag")
           PY
-          "$VER_FROM_TAG"
 
       - name: Build distributions
         run: |
