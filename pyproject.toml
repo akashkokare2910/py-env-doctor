@@ -7,11 +7,11 @@ name = "py-env-doctor"
 version = "0.1.0"
 description = "Diagnose Python environment issues and provide actionable fixes."
 authors = [
-  { name = "Akash", email = "" }
+  { name = "Akash" }
 ]
 requires-python = ">=3.9"
-readme = "README.md"
-license = { text = "MIT" }
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
 keywords = ["python", "environment", "pip", "venv", "conda", "diagnostics"]
 classifiers = [
   "Programming Language :: Python :: 3",
